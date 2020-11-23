@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { setToken } from '../utils/token';
-import * as auth from '../utils/auth.js';
-import InfoToolTip from './InfoToolTip.js';
-import cross from '../images/Redcross.svg';
+import { Link } from 'react-router-dom';
 
 const Login = ({authorization }) => {
     const [data, setData] = useState({

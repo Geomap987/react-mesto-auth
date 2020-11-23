@@ -13,7 +13,7 @@ export const register = (password, email) => {
   })
     .then((response) => {
       return response
-    }).catch(err => console.log(err))
+    })
 };
 
 export const authorize = (password, email) => {
@@ -35,7 +35,6 @@ export const authorize = (password, email) => {
         return;
       }
     })
-    .catch(err => console.log(err))
 };
 
 
@@ -48,5 +47,5 @@ export const getContent = (token) => {
       'Authorization': `Bearer ${token}`,
     }
   })
-    .then(res => res.json()).catch(err => console.log(err))
+    .then(res => res.json())
 }

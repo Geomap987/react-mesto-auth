@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import * as auth from '../utils/auth.js';
-import { getToken, removeToken, setToken } from '../utils/token';
+import { getToken, setToken } from '../utils/token';
 
 import Header from './Header.js';
 import Mesto from './Mesto.js';
@@ -28,6 +28,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState({ email: '' });
   const [message, setMessage] = useState('');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [image, setImage] = useState({});
   const [isInfoToolTipOpen, setInfoToolTipOpen] = React.useState(false);
 
@@ -57,29 +58,39 @@ function App() {
           history.push('/');
         }
       })
-      .catch(err => { console.log(err); handleInfoToolTip() });
+      .catch((err) => {
+        console.log(err);
+        handleInfoToolTip()
+      })
   }
 
   const registration = (password, email) => {
     auth.register(password, email).then((res) => {
-      console.log(res.status)
+      console.log(res)
       if (res.status !== 400) {
         setMessage('Вы успешно зарегистрировались!');
         setImage(check)
+        setRegistrationSuccess(true)
         handleInfoToolTip();
       } else {
         setMessage('Что-то пошло не так!');
-        setImage(check)
+        setImage(cross)
+        setRegistrationSuccess(false)
         handleInfoToolTip();
       }
-    })
+    }).catch((err) => {
+      console.log(err)
+      setMessage('Что-то пошло не так!');
+      setImage(cross)
+      setRegistrationSuccess(false)
+      handleInfoToolTip();
+    }
+    )
   }
 
   const tokenCheck = () => {
     const jwt = getToken();
-    console.log(jwt)
     if (!jwt) {
-      console.log('no token')
       return;
     }
     auth.getContent(jwt).then((res) => {
@@ -96,7 +107,7 @@ function App() {
         console.log('no user')
         return
       }
-    });
+    }).catch(err => console.log(err))
   }
 
   function handleInfoToolTip() {
@@ -113,7 +124,7 @@ function App() {
     setInfoToolTipOpen(false);
     setMessage('')
     setImage(blank)
-    if (loggedIn) { history.push('/sign-in') }
+    if (registrationSuccess) { history.push('/sign-in') }
   }
 
   useEffect(() => {
@@ -138,7 +149,7 @@ function App() {
       }).catch((err) => console.log(err));
   }, [])
 
-//обработка событий карточек и попапов
+  //обработка событий карточек и попапов
   function handleCardClick(card) {
     setSelectedCard(card)
   }
@@ -224,41 +235,54 @@ function App() {
     <UserDataContext.Provider value={userData}>
       <CurrentUserContext.Provider value={currentUser}>
         <CardContext.Provider value={cards}>
-        <CurrentCardContext.Provider value={selectedCard}>
-          <Switch>
-            <ProtectedRoute exact path="/" loggedIn={loggedIn} component={Mesto}
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              openAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick}
-              onCardDelete={handleCardDelete}
-              onCardLike={handleCardLike}
-              closeAllPopups={closeAllPopups}
-              isEditProfilePopupOpen={isEditProfilePopupOpen}
-              isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-              isAddPlacePopupOpen={isAddPlacePopupOpen}
-              handleUpdateUser={handleUpdateUser}
-              handleUpdateAvatar={handleUpdateAvatar}
-              handleAddPlaceSubmit={handleAddPlaceSubmit}
-            />
-
-            <Route path="/sign-up">
-              <div className="page">
-                <Header userEmail={``} buttonLink={`/sign-in`} buttonText={`Войти`} />
-                <Register registration={registration} />
-                <InfoToolTip title={message} image={image} isOpen={isInfoToolTipOpen} onClose={closeInfoToolTipPush} ></InfoToolTip>
-              </div>
-            </Route>
-            <Route path="/sign-in">
-              <div className="page">
-                <Header userEmail={``} buttonLink={`/sign-up`} buttonText={`Регистрация`} />
-                <Login authorization={authorization} />
-                <InfoToolTip title={message} image={image} isOpen={isInfoToolTipOpen} onClose={closeInfoToolTip} ></InfoToolTip>
-              </div>
-            </Route>
-
-            <Redirect to={"/"} />
-          </Switch>
+          <CurrentCardContext.Provider value={selectedCard}>
+            <Switch>
+              <ProtectedRoute exact path="/" loggedIn={loggedIn} component={Mesto}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                openAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                onCardDelete={handleCardDelete}
+                onCardLike={handleCardLike}
+                closeAllPopups={closeAllPopups}
+                isEditProfilePopupOpen={isEditProfilePopupOpen}
+                isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+                isAddPlacePopupOpen={isAddPlacePopupOpen}
+                handleUpdateUser={handleUpdateUser}
+                handleUpdateAvatar={handleUpdateAvatar}
+                handleAddPlaceSubmit={handleAddPlaceSubmit}
+              />
+              <Route path="/sign-up">
+                <div className="page">
+                  <Header 
+                  userEmail={``} 
+                  buttonLink={`/sign-in`} 
+                  buttonText={`Войти`} />
+                  <Register 
+                  registration={registration} />
+                  <InfoToolTip 
+                  title={message} 
+                  image={image} 
+                  isOpen={isInfoToolTipOpen} 
+                  onClose={closeInfoToolTipPush} />
+                </div>
+              </Route>
+              <Route path="/sign-in">
+                <div className="page">
+                  <Header 
+                  userEmail={``}
+                  buttonLink={`/sign-up`} 
+                  buttonText={`Регистрация`} />
+                  <Login authorization={authorization} />
+                  <InfoToolTip 
+                  title={message} 
+                  image={image} 
+                  isOpen={isInfoToolTipOpen} 
+                  onClose={closeInfoToolTip} />
+                </div>
+              </Route>
+              <Redirect to={"/"} />
+            </Switch>
           </CurrentCardContext.Provider>
         </CardContext.Provider>
       </CurrentUserContext.Provider>

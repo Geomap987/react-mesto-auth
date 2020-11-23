@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import InfoToolTip from './InfoToolTip.js';
-import check from '../images/Blackcheck.svg';
-import * as auth from '../utils/auth.js';
+import { Link } from 'react-router-dom';
 
 const Register = ({ registration }) => {
   const [data, setData] = useState({
@@ -22,9 +19,8 @@ const Register = ({ registration }) => {
     e.preventDefault();
     const { email, password } = data;
     registration(password, email)
-    
-  }
 
+  }
 
   return (
     <div className="register">
