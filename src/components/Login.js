@@ -5,23 +5,11 @@ import * as auth from '../utils/auth.js';
 import InfoToolTip from './InfoToolTip.js';
 import cross from '../images/Redcross.svg';
 
-const Login = ({ handleLogin }) => {
+const Login = ({authorization }) => {
     const [data, setData] = useState({
         username: '',
         password: '',
     });
-
-    const [message, setMessage] = useState('');
-    const [isInfoToolTipOpen, setInfoToolTipOpen] = React.useState(false);
-    const history = useHistory();
-
-    function handleInfoToolTip() {
-        setInfoToolTipOpen(!isInfoToolTipOpen)
-    }
-
-    function closeInfoToolTip() {
-        setInfoToolTipOpen(false)
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,23 +26,8 @@ const Login = ({ handleLogin }) => {
         if (!password || !username) {
             return;
         }
-
-        auth.authorize(password, username)
-            .then((data) => {
-                console.log(data)
-                if (!data) {
-                    setMessage('Что-то пошло не так! Попробуйте еще раз.')
-                    handleInfoToolTip()
-                }
-                else {
-                    setToken(data.token);
-                    setData({ password: '', username: '' });
-                    setMessage('');
-                    handleLogin(data.token);
-                    history.push('/');
-                }
-            })
-            .catch(err => { console.log(err); handleInfoToolTip() });
+        authorization(password, username);
+        setData({ password: '', username: '' });
     }
 
     return (
@@ -74,7 +47,7 @@ const Login = ({ handleLogin }) => {
                 <p>Ещё не зарегистрированы?</p>
                 <Link to="/sign-up" className="signup__link">Зарегистрироваться</Link>
             </div>
-            <InfoToolTip title={message} image={cross} isOpen={isInfoToolTipOpen} onClose={closeInfoToolTip} ></InfoToolTip>
+            
         </div>
     )
 }
