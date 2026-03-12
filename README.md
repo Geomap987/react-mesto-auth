@@ -1,26 +1,33 @@
-# Проект 14: Место
+# Project 14: Mesto
 
-### Основные задачи, реализованные в данном проекте
-* Реализация проекта на React;
-* Подключение проекта к серверу;
-* Загрузка информации о пользователе с сервера;
-* Загрузка карточек с сервера;
-* Возможность редактирования профиля, включая изменение аватара;
-* Отображение количества лайков;
-* Реализация удаления карточки, загруженной юзером.
-* Реализация регистрации и авторизации юзера;
+## Features
+- Built with React
+- Connected to a backend server
+- Fetches user profile data from the server
+- Fetches cards from the server
+- Supports profile editing, including avatar updates
+- Displays like counters
+- Allows users to delete their own cards
+- Supports user registration and authentication
 
+## Description
 
-**Описание**
+Mesto is a React-based project connected to a backend server. It supports both fetching and sending data through an API.
 
-Проект написан на React. Реализовано подключение проекта к серверу, получение и отправка данных с помощью API, реализована дополнительная функциональность: удаление только своих карточек, попап подтверждения удаления, изменение аватара, отоброжение количества лайков каждой карточки 
+The project includes the following functionality:
+- editing user profile information
+- changing the user avatar
+- displaying the number of likes on each card
+- deleting only cards created by the current user
+- showing a confirmation popup before deleting a card
+- user registration and login
 
-**Основные технологии**
+## Technologies Used
 
-* Проект реализован с использованием функциональных компонентов React, хуков useState, useEffect, useContext, useRef;
-* Для получения эффекта адаптивности были использованы медиазапросы, а также свойства flex-box и grid;
-* Галерея реализована с помощью Grid;
-* Для реализации окна Popup на JS было использовано добавление и удаление модификатора popup_opened при нажатии на кнопки редактирования и закрытия формы;
-* С помощью React было задано поведение формы при действии submit, когда введенные значения автоматически отображаются в профиле, добавляются фотографии;
-* Начальные карточки добавляются из объекта при помощи метода prepend, пользовательские карточки добавляются методом push.
-* С помощью API были реализованы запросы на сервер и отображение элементов страницы на основе данных, полученных с сервера. 
+- React functional components
+- React hooks: `useState`, `useEffect`, `useContext`, `useRef`
+- Responsive layout with media queries
+- Flexbox
+- CSS Grid
+- API integration for working with server data
+- Popup handling through conditional class modifiers
